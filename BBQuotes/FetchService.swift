@@ -7,9 +7,9 @@
 
 import Foundation
 
-struct FeatchService{
+struct FetchService{
     
-    private enum FeatchError : Error{
+    private enum FetchError : Error{
         case badResponse
     }
     
@@ -28,7 +28,7 @@ struct FeatchService{
         
         // Handle Response
         guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
-            throw FeatchError.badResponse
+            throw FetchError.badResponse
         }
         
         // Decode Data
@@ -50,7 +50,7 @@ struct FeatchService{
         
         // Handle Response
         guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
-            throw FeatchError.badResponse
+            throw FetchError.badResponse
         }
         
         // Decode Data
@@ -73,7 +73,7 @@ struct FeatchService{
         
         // Handle Response
         guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
-            throw FeatchError.badResponse
+            throw FetchError.badResponse
         }
         
         // Decode Data
@@ -88,6 +88,28 @@ struct FeatchService{
             }
         }
         return nil
+    }
+    
+    func fetchEpisode(for show:String) async throws -> Episode? {
+        
+        let episodeURL = baseURL.appending(path: "episodes")
+        let fetchURL = episodeURL.appending(queryItems: [URLQueryItem(name: "production", value: show)])
+
+        //Fetch Data
+        let (data, response) = try await URLSession.shared.data(from: fetchURL)
+        
+        // Handle Response
+        guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
+            throw FetchError.badResponse
+        }
+        
+        // Decode Data
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        
+        let episodes = try decoder.decode([Episode].self, from: data)
+        
+        return episodes.randomElement()!
     }
     
 }

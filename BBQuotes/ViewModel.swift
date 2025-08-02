@@ -13,7 +13,8 @@ class ViewModel: ObservableObject {
     enum FetchStatus {
         case notStarted
         case fetching
-        case success
+        case successQuote
+        case successEpisode
         case failed(error: Error)
     }
 
@@ -21,8 +22,9 @@ class ViewModel: ObservableObject {
     @Published private(set) var status: FetchStatus = .notStarted
     @Published var quote: Quote
     @Published var character: Char
+    @Published var episode: Episode
 
-    private let fetcher = FeatchService()
+    private let fetcher = FetchService()
 
     init() {
         let decoder = JSONDecoder()
@@ -36,9 +38,14 @@ class ViewModel: ObservableObject {
         let charURL = Bundle.main.url(forResource: "samplecharacter", withExtension: "json")!
         let charData = try! Data(contentsOf: charURL)
         self.character = try! decoder.decode(Char.self, from: charData)
+
+        let episodeURL = Bundle.main.url(forResource: "sampleepisode", withExtension: "json")!
+        let episodeData = try! Data(contentsOf: episodeURL)
+        self.episode = try! decoder.decode(Episode.self, from: episodeData)
+        
     }
 
-    func getData(for show: String) async {
+    func getQuoteData(for show: String) async {
         status = .fetching
 
         do {
@@ -51,10 +58,26 @@ class ViewModel: ObservableObject {
             characterWithDeath.death = fetchedDeath
             character = characterWithDeath
 
-            status = .success
+            status = .successQuote
         } catch {
             status = .failed(error: error)
         }
     }
+    
+    func getEpisode(for show: String) async {
+        status = .fetching
+
+        do {
+
+            if let unwrappedEpisodes = try await fetcher.fetchEpisode(for: show){
+                episode = unwrappedEpisodes
+            }
+
+            status = .successEpisode
+        } catch {
+            status = .failed(error: error)
+        }
+    }
+    
 }
 

@@ -7,101 +7,120 @@ struct CharacterView: View {
     
     var body: some View {
         GeometryReader{ geo in
-            ZStack(alignment: .top){
-                
-                Image(show.lowercased().replacingOccurrences(of: " ", with: ""))
-                    .resizable()
-                    .scaledToFit()
-                
-                ScrollView{
+            
+            ScrollViewReader{ proxy in
+                ZStack(alignment: .top){
                     
-                    AsyncImage(url: character.images[0]) { image in
-                        image
-                            .resizable()
-                            .scaledToFill()
-                    } placeholder: {
-                        ProgressView()
-                    }
-                    .frame(width: geo.size.width / 1.2, height: geo.size.height / 1.7)
-                    .clipShape(.rect(cornerRadius: 25))
-                    .padding(.top,60)
+                    Image(show.removeCaseAndSpaces())
+                        .resizable()
+                        .scaledToFit()
                     
-                    VStack(alignment: .leading){
-                        Text(character.name)
-                            .font(.largeTitle)
+                    ScrollView{
                         
-                        Text("Portrayed By: \(character.portrayedBy)")
-                            .font(.subheadline)
-                        
-                        Divider()
-                        
-                        Text("\(character.name) Character Info")
-                            .font(.title2)
-                        
-                        Text("Born: \(character.birthday)")
-                        Divider()
-
-                        Text("Ocuupations:")
-
-                        ForEach(character.occupations, id: \.self){ ocupation in
-                            Text("•\(ocupation)")
-                                .font(.subheadline)
-                        }
-                        
-                        Divider()
-                        Text("Nicknames:")
-                        Divider()
-
-                        if character.aliases.count > 0{
-                            ForEach(character.aliases, id: \.self){ alias in
-                                Text("•\(alias)")
-                                    .font(.subheadline)
-                            }
-                        }else{
-                            Text("None")
-                                .font(.subheadline)
-                        }
-                        
-                        Divider()
-
-                        DisclosureGroup("Status (spoiler alert!):"){
-                            VStack(alignment: .leading){
-                                Text(character.status)
-                                    .font(.title2)
+                        TabView{
+                            
+                            ForEach(character.images, id:\.self){ charcterUrl in
                                 
-                                if let death = character.death{
-                                    AsyncImage(url: character.death?.image) { image in
-                                        image
-                                            .resizable()
-                                            .scaledToFit()
-                                            .clipShape(.rect(cornerRadius: 15))
-                                    } placeholder: {
-                                        ProgressView()
-                                    }
-                                    
-                                    Text("How: \(death.details)")
-                                        .padding(.bottom, 7)
-                                    
-                                    Text("Last Words: \"\(death.lastWords)\"")
-                                    
+                                AsyncImage(url: charcterUrl) { image in
+                                    image
+                                        .resizable()
+                                        .scaledToFill()
+                                } placeholder: {
+                                    ProgressView()
                                 }
                                 
                             }
-                            .frame(maxWidth: .infinity,alignment: .leading)
                             
                         }
-                        .tint(.primary)
                         
-                    }.frame(width: geo.size.width/1.25,alignment: .leading)
-                    
+                        .tabViewStyle(.page)
+                        .frame(width: geo.size.width / 1.2, height: geo.size.height / 1.7)
+                        .clipShape(.rect(cornerRadius: 25))
+                        .padding(.top,60)
+                        
+                        VStack(alignment: .leading){
+                            Text(character.name)
+                                .font(.largeTitle)
+                            
+                            Text("Portrayed By: \(character.portrayedBy)")
+                                .font(.subheadline)
+                            
+                            Divider()
+                            
+                            Text("\(character.name) Character Info")
+                                .font(.title2)
+                            
+                            Text("Born: \(character.birthday)")
+                            Divider()
+                            
+                            Text("Ocuupations:")
+                            
+                            ForEach(character.occupations, id: \.self){ ocupation in
+                                Text("•\(ocupation)")
+                                    .font(.subheadline)
+                            }
+                            
+                            Divider()
+                            Text("Nicknames:")
+                            Divider()
+                            
+                            if character.aliases.count > 0{
+                                ForEach(character.aliases, id: \.self){ alias in
+                                    Text("•\(alias)")
+                                        .font(.subheadline)
+                                }
+                            }else{
+                                Text("None")
+                                    .font(.subheadline)
+                            }
+                            
+                            Divider()
+                            
+                            DisclosureGroup("Status (spoiler alert!):"){
+                                VStack(alignment: .leading){
+                                    Text(character.status)
+                                        .font(.title2)
+                                    
+                                    if let death = character.death{
+                                        AsyncImage(url: character.death?.image) { image in
+                                            image
+                                                .resizable()
+                                                .scaledToFit()
+                                                .clipShape(.rect(cornerRadius: 15))
+                                                .onAppear{
+                                                    withAnimation{
+                                                        proxy.scrollTo(1,anchor:.bottom)
+                                                    }
+                                                }
+                                        } placeholder: {
+                                            ProgressView()
+                                        }
+                                        
+                                        Text("How: \(death.details)")
+                                            .padding(.bottom, 7)
+                                        
+                                        Text("Last Words: \"\(death.lastWords)\"")
+                                        
+                                    }
+                                    
+                                }
+                                .frame(maxWidth: .infinity,alignment: .leading)
+                                
+                            }
+                            .tint(.primary)
+                            
+                        }.frame(width: geo.size.width/1.25,alignment: .leading)
+                            .padding(.bottom, 50)
+                            .id(1)
+                    }
+                    .scrollIndicators(.hidden)
                 }
-                .scrollIndicators(.hidden)
             }
         }.ignoresSafeArea()
     }
 }
 
 #Preview {
-    CharacterView(character: ViewModel().character, show: "Breaking Bad")
+    CharacterView(character: ViewModel().character, show: Constants.bbName)
         .preferredColorScheme(.dark)
 }

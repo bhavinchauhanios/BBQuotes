@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct QuoteView: View {
+struct FetchView: View {
     
     @StateObject private var vm = ViewModel()
     let show : String
@@ -11,7 +11,7 @@ struct QuoteView: View {
         GeometryReader { geo in
             ZStack {
                 
-                Image(show.lowercased().replacingOccurrences(of: " ", with: ""))
+                Image(show.removeCaseAndSpaces())
                     .resizable()
                     .frame(width: geo.size.width * 2.7, height: geo.size.height)
                 
@@ -23,7 +23,7 @@ struct QuoteView: View {
                         EmptyView()
                     case .fetching:
                         ProgressView()
-                    case .success:
+                    case .successQuote:
                         Text("\"\(vm.quote.quote)\"")
                             .multilineTextAlignment(.center)
                             .minimumScaleFactor(0.5)
@@ -55,25 +55,50 @@ struct QuoteView: View {
                         .onTapGesture {
                             showCharacterInfo.toggle()
                         }
+                        Spacer(minLength: 20)
+                    case .successEpisode:
+                        EpisodeView(episode: vm.episode)
                     case .failed(let error):
                         Text(error.localizedDescription)
+                  
                     }
 
-                    Button {
-                        Task {
-                            await vm.getData(for: show)
-                            print("Button Pressing...")
+                    HStack{
+                        Button {
+                            Task {
+                                await vm.getQuoteData(for: show)
+                                print("Button Pressing...")
+                            }
+                        } label: {
+                            Text("Get Random Quote")
+                                .font(.title3)
+                                .foregroundStyle(.white)
+                                .padding()
+                                .background(Color("\(show.removeSpaces())Button"))
+                                .clipShape(.rect(cornerRadius: 7))
+                                .shadow(color: Color("\(show.removeSpaces())Shadow"), radius: 2)
+                        
                         }
-                    } label: {
-                        Text("Get Random Quote")
-                            .font(.title)
-                            .foregroundStyle(.white)
-                            .padding()
-                            .background(Color("\(show.replacingOccurrences(of: " ", with: ""))Button"))
-                            .clipShape(.rect(cornerRadius: 7))
-                            .shadow(color: Color("\(show.replacingOccurrences(of: " ", with: ""))Shadow"), radius: 2)
-                    
+                        
+                        Spacer()
+                        
+                        Button {
+                            Task {
+                                await vm.getEpisode(for: show)
+                                print("Button Episode Pressing...")
+                            }
+                        } label: {
+                            Text("Get Random Episode")
+                                .font(.title3)
+                                .foregroundStyle(.white)
+                                .padding()
+                                .background(Color("\(show.removeSpaces())Button"))
+                                .clipShape(.rect(cornerRadius: 7))
+                                .shadow(color: Color("\(show.removeSpaces())Shadow"), radius: 2)
+                        
+                        }
                     }
+                    .padding(.horizontal, 30)
              
                     
                     Spacer(minLength: 95)
@@ -91,6 +116,6 @@ struct QuoteView: View {
 
 
 #Preview {
-    QuoteView(show: "Better Call Saul")
+    FetchView(show: Constants.bcsName)
         .preferredColorScheme(.dark)
 }
