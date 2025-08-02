@@ -10,9 +10,22 @@
 		07927BDA2E3B35EA0000D3A8 /* BBQuotes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BBQuotes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		078DBEC72E3E26970020D545 /* Exceptions for "BBQuotes" folder in "BBQuotes" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 07927BD92E3B35EA0000D3A8 /* BBQuotes */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		07927BDC2E3B35EA0000D3A8 /* BBQuotes */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				078DBEC72E3E26970020D545 /* Exceptions for "BBQuotes" folder in "BBQuotes" target */,
+			);
 			path = BBQuotes;
 			sourceTree = "<group>";
 		};
@@ -253,6 +266,8 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BBQuotes/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Say My Name";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -292,6 +307,8 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BBQuotes/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Say My Name";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;

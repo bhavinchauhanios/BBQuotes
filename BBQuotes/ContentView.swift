@@ -9,8 +9,10 @@ struct ContentView: View {
              // Main content area
              Group {
                  switch selectedTab {
-                 case "tortoise": Text("Breaking Bad View")
-                 case "briefcase": Text("Better Call Saul View")
+                 case "tortoise":
+                     QuoteView(show: "Breaking Bad View")
+                 case "briefcase":
+                     QuoteView(show: "Better Call Saul View")
                  default: Text("Unknown")
                  }
              }

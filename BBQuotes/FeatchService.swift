@@ -9,19 +9,20 @@ import Foundation
 
 struct FeatchService{
     
-    enum FeatchError : Error{
+    private enum FeatchError : Error{
         case badResponse
     }
     
-    let baseURL =  URL(string: "https://breaking-bad-api-six.vercel.app/api")!
+    private let baseURL =  URL(string: "https://breaking-bad-api-six.vercel.app/api/")!
     
-    //https://breaking-bad-api-six.vercel.app/api/quotes/random?production=Breaking +Bad
+    //https://breaking-bad-api-six.vercel.app/api/quotes/random?production=Breaking+Bad
     func fetchQuote(from show:String) async throws -> Quote {
         
         //BuildFetch URL
         let quoteURL = baseURL.appending(path: "quotes/random")
         let fetchURL = quoteURL.appending(queryItems: [URLQueryItem(name: "production", value: show)])
         
+        print(fetchURL)
         //Fetch Data
         let (data, response) = try await URLSession.shared.data(from: fetchURL)
         
