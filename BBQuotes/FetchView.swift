@@ -4,16 +4,21 @@ struct FetchView: View {
     
     @StateObject private var vm = ViewModel()
     let show : String
-    
     @State var showCharacterInfo = false
     
     var body: some View {
         GeometryReader { geo in
             ZStack {
                 
+                // MARK: - Background Image with Blur
                 Image(show.removeCaseAndSpaces())
                     .resizable()
+                    .scaledToFill()
                     .frame(width: geo.size.width * 2.7, height: geo.size.height)
+                    .clipped()
+                    .overlay(Color.black.opacity(0.3)) // darken overlay
+                    .blur(radius: 20)
+                    .ignoresSafeArea()
                 
                 VStack {
                     Spacer(minLength: 60)
@@ -29,8 +34,8 @@ struct FetchView: View {
                             .minimumScaleFactor(0.5)
                             .foregroundStyle(.white)
                             .padding()
-                            .background(.black.opacity(0.5))
-                            .clipShape(.rect(cornerRadius:25))
+                            .background(.ultraThinMaterial)
+                            .clipShape(.rect(cornerRadius: 25))
                             .padding(.horizontal)
 
                         ZStack(alignment: .bottom) {
@@ -60,9 +65,10 @@ struct FetchView: View {
                         EpisodeView(episode: vm.episode)
                     case .failed(let error):
                         Text(error.localizedDescription)
-                  
+                            .foregroundColor(.red)
                     }
 
+                    // MARK: - Redesigned Buttons
                     HStack{
                         Button {
                             Task {
@@ -75,7 +81,7 @@ struct FetchView: View {
                                 .foregroundStyle(.white)
                                 .padding()
                                 .background(Color("\(show.removeSpaces())Button"))
-                                .clipShape(.rect(cornerRadius: 7))
+                                .clipShape(.rect(cornerRadius: 15))
                                 .shadow(color: Color("\(show.removeSpaces())Shadow"), radius: 2)
                         
                         }
@@ -93,15 +99,14 @@ struct FetchView: View {
                                 .foregroundStyle(.white)
                                 .padding()
                                 .background(Color("\(show.removeSpaces())Button"))
-                                .clipShape(.rect(cornerRadius: 7))
+                                .clipShape(.rect(cornerRadius: 15))
                                 .shadow(color: Color("\(show.removeSpaces())Shadow"), radius: 2)
                         
                         }
                     }
                     .padding(.horizontal, 30)
-             
                     
-                    Spacer(minLength: 95)
+                    Spacer(minLength: 100)
                 }
                 .frame(width: geo.size.width, height: geo.size.height)
             }

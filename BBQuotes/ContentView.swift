@@ -21,7 +21,9 @@ struct ContentView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .edgesIgnoringSafeArea(.all)
+        
 
+            // Custom Tab Bar
             // Custom Tab Bar
             HStack {
                 ForEach(icons, id: \.self) { icon in
@@ -48,10 +50,13 @@ struct ContentView: View {
             .padding(.vertical, 10)
             .background(
                 RoundedRectangle(cornerRadius: 25)
-                    .fill(Color.white)
-                    .shadow(color: .gray.opacity(0.4), radius: 10, x: 0, y: -2)
+                    .fill(.ultraThinMaterial)
+                    .background(.ultraThinMaterial)
+                    .clipShape(RoundedRectangle(cornerRadius: 25))
+                    .shadow(color: .gray.opacity(0.2), radius: 10, x: 0, y: -2)
             )
             .padding(.horizontal)
+
         }
     }
 }

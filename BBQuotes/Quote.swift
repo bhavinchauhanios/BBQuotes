@@ -5,7 +5,7 @@
 //  Created by Bhavin Chauhan on 01/08/25.
 //
 
-struct Quote: Decodable{
+struct Quote: Decodable, Equatable{
     
     let quote : String
     let character : String
